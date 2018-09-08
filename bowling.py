@@ -2,23 +2,16 @@ def score(game):
     result = 0
     frame = 1
     in_first_half = True
+    last = 0
     for roll in range(len(game)):
-        if game[roll] == '/':
-            result += 10 - last
-        else:
-            result += get_value(game[roll])
+        result += roll_score(game[roll], get_value(game[roll]), last)
         if frame < 10 and get_value(game[roll]) == 10:
-            if game[roll] == '/':
-                result += get_value(game[roll+1])
-            elif game[roll].lower() == 'x':
-                result += get_value(game[roll+1])
-                if game[roll+2] == '/':
-                    result += 10 - get_value(game[roll+1])
-                else:
-                    result += get_value(game[roll+2])
+            result += get_value(game[roll+1])
+            if game[roll].lower() == 'x':
+                result += roll_score(game[roll+2], get_value(game[roll+2]), get_value(game[roll+1]))
         last = get_value(game[roll])
         if in_first_half:
-            in_first_half = False
+            in_first_half = not in_first_half
         else:
             in_first_half = True
             frame += 1
@@ -37,3 +30,10 @@ def get_value(char):
         return 0
     else:
         raise ValueError()
+
+
+def roll_score(try_to_check, actual_try_points, last_try_points):
+    if try_to_check == '/':
+        return 10 - last_try_points
+    else:
+        return actual_try_points
