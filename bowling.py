@@ -10,7 +10,7 @@ def score(game):
         if frame < 10 and get_value(game[roll]) == 10:
             if game[roll] == '/':
                 result += get_value(game[roll+1])
-            elif any(game[roll] == piece for piece in char_list[:-1]):
+            elif game[roll].lower() == 'x':
                 result += get_value(game[roll+1])
                 if game[roll+2] == '/':
                     result += 10 - get_value(game[roll+1])
@@ -22,25 +22,18 @@ def score(game):
         else:
             in_first_half = True
             frame += 1
-        if any(game[roll] == piece for piece in char_list[:-1]):
+        if game[roll].lower() == 'x':
             in_first_half = True
             frame += 1
     return result
 
 
 def get_value(char):
-    if any(char == piece for piece in char_list):
+    if char in "123456789":
+        return int(char)
+    elif char.lower() in "x/":
         return 10
     elif char == '-':
         return 0
-    points = []
-    for num in range(9):
-        points.append(num + 1)
-        if int(char) == points[num]:
-            return int(char)
     else:
         raise ValueError()
-
-
-characters = 'X,x,/'
-char_list = characters.split(',')
