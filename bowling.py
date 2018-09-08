@@ -17,12 +17,11 @@ def score(game):
                 else:
                     result += get_value(game[roll+2])
         last = get_value(game[roll])
-        if not in_first_half:
-            frame += 1
         if in_first_half:
             in_first_half = False
         else:
             in_first_half = True
+            frame += 1
         if game[roll] == 'X' or game[roll] == 'x':
             in_first_half = True
             frame += 1
@@ -30,9 +29,9 @@ def score(game):
 
 
 def get_value(char):
-    if char == 'X' or char == 'x':
-        return 10
-    elif char == '/':
+    characters = 'X,x,/'
+    char_list = characters.split(',')
+    if any(char == piece for piece in char_list):
         return 10
     elif char == '-':
         return 0
@@ -43,3 +42,6 @@ def get_value(char):
             return int(char)
     else:
         raise ValueError()
+
+
+
